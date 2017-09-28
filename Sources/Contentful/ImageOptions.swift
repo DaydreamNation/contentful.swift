@@ -26,8 +26,7 @@ public extension Asset {
      - Throws: Will throw SDKError if the SDK is unable to generate a valid URL with the desired ImageOptions.
      */
     public func url(with imageOptions: [ImageOption] = []) throws -> URL {
-        // TODO: Better refactor?
-        guard let url = try file?.url.absoluteString.url(with: imageOptions) else {
+        guard let url = try urlString?.url(with: imageOptions) else {
             throw SDKError.invalidURL(string: urlString ?? "No url string is stored for Asset: \(sys.id)")
         }
         return url

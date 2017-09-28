@@ -265,8 +265,7 @@ open class Client {
             completion(Result.success(decodedObject))
 
         } catch let error as DecodingError {
-            // TODO:
-            completion(Result.error(SDKError.unparseableJSON(data: data, errorMessage: "\(error)")))
+            completion(Result.error(SDKError.unparseableJSON(data: data, errorMessage: "The SDK was unable to parse the JSON: \(error)")))
         } catch _ {
             completion(Result.error(SDKError.unparseableJSON(data: data, errorMessage: "")))
         }

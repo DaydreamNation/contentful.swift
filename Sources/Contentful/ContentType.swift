@@ -11,7 +11,7 @@ import Foundation
 /// A Content Type represents your data model for Entries in a Contentful Space
 public class ContentType: Resource, Decodable {
 
-    // TODO: Document
+    ///  System fields.
     public let sys: Sys
 
     /// The fields which are part of this Content Type

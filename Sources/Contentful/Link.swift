@@ -24,7 +24,7 @@ public enum Link {
         /// The type of the linked resource: either "Entry" or "Asset".
         public let linkType: String
 
-        // TODO:
+        /// The content type identifier for the linked resource.
         public let type: String
     }
 
@@ -75,7 +75,6 @@ public enum Link {
             let id = sys["id"] as? String,
             let linkType = sys["linkType"] as? String,
             let type = sys["type"] as? String {
-            // TODO: Use a dictionary decoder
             return Link.unresolved(Link.Sys(id: id, linkType: linkType, type: type))
         }
 

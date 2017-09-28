@@ -65,17 +65,15 @@ public final class SyncSpace: Decodable {
         }
 
         guard let nextSyncUrl = syncUrl else {
-            // TODO: Error message.
-            fatalError("TODO")
+            throw SDKError.unparseableJSON(data: nil, errorMessage: "No sync url for future sync operations was serialized from the response.")
         }
+
         self.syncToken = SyncSpace.syncToken(from: nextSyncUrl)
         self.hasMorePages = hasMorePages
 
         // A copy as an array of dictionaries just to extract "sys.type" field.
-        // FIXME: throw error
         guard let items = try container.decode(Array<Any>.self, forKey: .items) as? [[String: Any]] else {
-            // TODO: correct error TypeMismath
-            throw SDKError.invalidClient()
+            throw SDKError.unparseableJSON(data: nil, errorMessage: "SDK was unable to serialize returned resources")
         }
         var itemsArrayContainer = try container.nestedUnkeyedContainer(forKey: .items)
 
@@ -83,15 +81,13 @@ public final class SyncSpace: Decodable {
         while itemsArrayContainer.isAtEnd == false {
 
             guard let sys = items[itemsArrayContainer.currentIndex]["sys"] as? [String: Any], let type = sys["type"] as? String else {
-                // TODO: correct error
-                throw SDKError.invalidClient()
+                let errorMessage = "SDK was unable to parse sys.type property necessary to finish resource serialization."
+                throw SDKError.unparseableJSON(data: nil, errorMessage: errorMessage)
             }
             let item: Resource
             switch type {
             case "Asset":           item = try itemsArrayContainer.decode(Asset.self)
             case "Entry":           item = try itemsArrayContainer.decode(Entry.self)
-                // FIXME: 
-//            case "ContentType":     item = try itemsArrayContainer.decode(ContentType.self)
             case "DeletedAsset":    item = try itemsArrayContainer.decode(DeletedResource.self)
             case "DeletedEntry":    item = try itemsArrayContainer.decode(DeletedResource.self)
             default: fatalError("Unsupported resource type '\(type)'")

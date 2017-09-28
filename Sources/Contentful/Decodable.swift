@@ -25,12 +25,6 @@ internal struct JSONCodingKeys: CodingKey {
     }
 }
 
-//internal extension JSONDecoder {
-//    internal func decode(_ type: Dictionary<String, Any>.Type, from: Data) -> Dictionary<String, Any> {
-//        let container = self.
-//    }
-//}
-
 internal extension KeyedDecodingContainer {
 
     internal func decode(_ type: Dictionary<String, Any>.Type, forKey key: K) throws -> Dictionary<String, Any> {

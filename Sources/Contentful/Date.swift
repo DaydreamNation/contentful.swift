@@ -36,18 +36,3 @@ public extension String {
         return Date.Formatter.iso8601.date(from: self)
     }
 }
-//
-//public final class SysISO8601DateTransform: DateFormatterTransform {
-//
-//    public init() {
-//
-//        let formatter = Date.Formatter.iso8601
-//        formatter.calendar = Calendar(identifier: .iso8601)
-//        formatter.locale = Foundation.Locale(identifier: "en_US_POSIX")
-//        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-//        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
-//
-//        super.init(dateFormatter: formatter)
-//    }
-//}
-

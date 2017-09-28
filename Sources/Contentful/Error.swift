@@ -36,7 +36,7 @@ public enum SDKError: Error {
      *  @param Data The data being parsed
      *  @param String The error which occured during parsing
      */
-    case unparseableJSON(data: Data, errorMessage: String)
+    case unparseableJSON(data: Data?, errorMessage: String)
 
     /// Thrown when no entry is found matching a specific Entry id
     case noEntryFoundFor(id: String)
@@ -101,9 +101,11 @@ public enum QueryError: Error {
 /// Information regarding an error received from Contentful
 public class ContentfulError: Decodable, Error {
 
-    // TODO: Document
+    /// System fields for the error.
     public struct Sys: Decodable {
+        /// The identifier for fo rth eerror.
         let id: String?
+        /// The type of the error.
         let type: String?
     }
 

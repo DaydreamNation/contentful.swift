@@ -30,11 +30,13 @@ public struct Sys {
         return contentTypeInfo?["sys"]?.id
     }
 
+    /// The number denoting what published version of the resource is.
+    public let revision: Int?
+
     // Because we have a root key of "sys" we will use a dictionary.
     private let contentTypeInfo: [String: Link.Sys]? // Not present on `Asset` or `ContentType`
 
-    // TODO: Document.
-    public let revision: Int?
+
 }
 
 extension Sys: Decodable {

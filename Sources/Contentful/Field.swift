@@ -95,25 +95,4 @@ public struct Field: Decodable {
         case items
         case linkType
     }
-//    // MARK: <ImmutableMappable>
-//
-//    public init(map: Map) throws {
-//        id          = try map.value("id")
-//        name        = try map.value("name")
-//        disabled    = try map.value("disabled")
-//        localized   = try map.value("localized")
-//        required    = try map.value("required")
-//
-//        var typeString: String!
-//        typeString <- map["type"]
-//        type = FieldType(rawValue: typeString) ?? .none
-//
-//        var itemTypeString: String?
-//
-//        itemTypeString <- map["items.type"]
-//        itemTypeString <- map["items.linkType"]
-//        itemTypeString <- map["linkType"]
-//
-//        self.itemType = FieldType(rawValue: itemTypeString ?? FieldType.none.rawValue) ?? .none
-//    }
 }

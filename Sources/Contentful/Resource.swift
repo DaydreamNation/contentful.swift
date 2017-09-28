@@ -75,7 +75,6 @@ public class LocalizableResource: Resource, Decodable {
     // Context used for handling locales during decoding of `Asset` and `Entry` instances.
     internal let localizationContext: LocalizationContext
 
-    // TODO: Make sure implicit unwrapping doesn't do bad things.
     static let localizationContextKey = CodingUserInfoKey(rawValue: "localizationContext")!
 
     public required init(from decoder: Decoder) throws {

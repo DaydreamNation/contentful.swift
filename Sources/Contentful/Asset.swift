@@ -15,22 +15,25 @@ public extension String {
      */
     public func url() throws -> URL {
         guard let url = URL(string: self) else { throw SDKError.invalidURL(string: self) }
-
         return url
     }
 }
 
-/// An asset represents a media file in Contentful
+/// An asset represents a media file in Contentful.
 public class Asset: LocalizableResource {
 
-    /// URL of the media file associated with this asset. Optional for compatibility with `select` operator queries.
-    /// Also, If the media file is still being processed, as the final stage of uploading to your space, this property will be nil.
+    /// The URL for the underlying media file. Returns nil if the url was omitted from the response (i.e. `select` operation in query)
+    /// or if the underlying media file is still processing with Contentful.
+    public var url: URL? {
+        guard let url = file?.url else { return nil }
+        return url
+    }
 
-    // TODO: REturn raw URL type with Codable!
+    /// String representation for the URL of the media file associated with this asset. Optional for compatibility with `select` operator queries.
+    /// Also, If the media file is still being processed, as the final stage of uploading to your space, this property will be nil.
     public var urlString: String? {
-        guard let urlString = localizedString(path: "file.url") else { return nil }
-        let urlStringWithScheme = "https:" + urlString
-        return urlStringWithScheme
+        guard let urlString = url?.absoluteString else { return nil }
+        return urlString
     }
 
     /// The title of the asset. Optional for compatibility with `select` operator queries.
@@ -61,20 +64,23 @@ public class Asset: LocalizableResource {
         /// Details of the file, depending on it's MIME type.
         public let details: Details?
 
-        // TODO: Implement custom decoder that appends "https"
-        public let url: URL
+        /// The remote URL for the binary data for this Asset.
+        /// If the media file is still being processed, as the final stage of uploading to your space, this property will be nil.
+        public let url: URL?
 
         public struct Details: Decodable {
             /// The size of the file in bytes.
             public let size: Int
 
-            public let image: Image?
+            /// Additional information describing the image the asset references.
+            public let imageInfo: ImageInfo?
 
-            public struct Image: Decodable {
+            public struct ImageInfo: Decodable {
                 let width: Double
                 let height: Double
             }
         }
+
         public init(from decoder: Decoder) throws {
             let container   = try decoder.container(keyedBy: CodingKeys.self)
             fileName        = try container.decode(String.self, forKey: .fileName)
@@ -83,23 +89,14 @@ public class Asset: LocalizableResource {
             // Decodable handles URL's automatically but we need to prepend the https protocol.
             let urlString   = try container.decode(String.self, forKey: .url)
             guard let url = URL(string: "https:" + urlString) else {
-                // TODO:
-                throw SDKError.invalidURL(string: urlString)
+                throw SDKError.invalidURL(string: "Asset had urlString incapable of being made into a Foundation.URL object \(urlString)")
             }
             self.url = url
         }
+
         private enum CodingKeys: String, CodingKey {
             case fileName, contentType, url, details
         }
-    }
-
-    /// The URL for the underlying media file
-    public func url() throws -> URL {
-        guard let url = file?.url else {
-            // TODO:
-            throw SDKError.invalidURL(string: urlString ?? "No url string is stored for Asset: \(sys.id)")
-        }
-        return url
     }
 
     // MARK: Private
